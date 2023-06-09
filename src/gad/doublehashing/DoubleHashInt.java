@@ -1,44 +1,53 @@
 package gad.doublehashing;
 
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 public class DoubleHashInt implements DoubleHashable<Integer> {
 
 	private int primeSize;
-	private int[] a;
-	private int[] b;
 
 	public DoubleHashInt(int primeSize) {
 		this.primeSize = primeSize;
-		a = new int[] {1, 2, 3};
-		b= new int[] {4, 5, 6};
 	}
 
 	@Override
 	public int hash(Integer key) {
-		byte[] x = bytes(key);
-		int sum = 0;
-		for (int i = 0; i < x.length; i++) {
-			sum += x[i] * a[i % a.length];
+		return key.hashCode();
+		/*
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
 		}
-		return fastModulo(sum, primeSize);
+		int i = key.hashCode();
+		byte[] hash = key.byteValue();
+		return bytesToInt(hash);
+		 */
 	}
 
 	@Override
 	public int hashTick(Integer key) {
-		byte[] x = bytes(key);
-		int sum = 0;
-		for (int i = 0; i < x.length; i++) {
-			sum += x[i] * b[i % b.length];
+		return key.hashCode();
+		/*
+		MessageDigest digest = null;
+		try {
+			digest = MessageDigest.getInstance("SHA-256");
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
 		}
-		return fastModulo(sum, primeSize);
+		byte[] hash = key.byteValue();
+		return bytesToInt(hash);
+		 */
 	}
 
-	private byte[] bytes(Integer key) {
-		return key.toString().getBytes(StandardCharsets.UTF_8);
-	}
-
-	public static int fastModulo(int i, int divisor) {
-		return i & (divisor - 1);
+	public int bytesToInt(byte[] hash) {
+		int result = 0;
+		for (int i = 0; i < this.primeSize; i++) {
+			result |= (hash[i] & 0xFF) << (8 * (this.primeSize - i - 1));
+		}
+		return result;
 	}
 }
