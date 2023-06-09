@@ -4,9 +4,9 @@ import java.nio.charset.StandardCharsets;
 
 public class DoubleHashInt implements DoubleHashable<Integer> {
 
-	int primeSize;
-	int[] a;
-	int[] b;
+	private int primeSize;
+	private int[] a;
+	private int[] b;
 
 	public DoubleHashInt(int primeSize) {
 		this.primeSize = primeSize;
