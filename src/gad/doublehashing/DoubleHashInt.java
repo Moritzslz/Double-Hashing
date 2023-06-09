@@ -5,7 +5,6 @@ import java.nio.charset.StandardCharsets;
 public class DoubleHashInt implements DoubleHashable<Integer> {
 
 	int primeSize;
-	int[] vector;
 	public DoubleHashInt(int primeSize) {
 		this.primeSize = primeSize;
 	}
@@ -22,6 +21,5 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
 		if(key < 0 )
 			key *= -1;
 		return 1 + key % (primeSize - 1);
-		//return 1 + key / primeSize % primeSize - 1;
 	}
 }
