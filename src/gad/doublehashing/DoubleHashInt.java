@@ -17,7 +17,7 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
 			if (i % 2 == 0)
 				hashedString += ((bytes[i] + 3) * (i + 1)) % 16;
 			else
-				hashedString += (bytes[i] + 6) * (i - 1) % 7;
+				hashedString += (bytes[i] + 6) * (i - 1);
 		}
 		int hashedKey =  Integer.parseInt(hashedString);
 		return hashedKey;
@@ -31,7 +31,7 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
 			if (i % 2 == 0)
 				hashedString += ((bytes[i] + 9) * (i + 3)) % 26;
 			else
-				hashedString += (bytes[i] + 5) * (i + 2) % 13;
+				hashedString += (bytes[i] + 5) * (i + 2);
 		}
 		int hashedKey =  Integer.parseInt(hashedString);
 		return hashedKey;
