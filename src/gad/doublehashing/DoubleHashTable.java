@@ -10,7 +10,8 @@ public class DoubleHashTable<K, V> {
 	HashableFactory hashableFactory;
 	DoubleHashable doubleHashable;
 	int collisions;
-	ArrayList hasBeenHashed;
+	int maxRehashes;
+	ArrayList beenHashed;
 
 	@SuppressWarnings("unchecked")
 	public DoubleHashTable(int primeSize, HashableFactory<K> hashableFactory) {
@@ -19,6 +20,8 @@ public class DoubleHashTable<K, V> {
 		this.primeSize = primeSize;
 		this.hashableFactory = hashableFactory;
 		this.doubleHashable = hashableFactory.create(primeSize);
+		collisions = 0;
+		maxRehashes = 0;
 	}
 
 	public int hash(K key, int i) {
@@ -26,19 +29,16 @@ public class DoubleHashTable<K, V> {
 	}
 
 	public boolean insert(K k, V v) {
-		int i = 1;
 		Pair nPair = new Pair(k, v);
 		int hashKey = hash(k,0);
 		if (pairs[hashKey] == null) {
 			pairs[hashKey] = nPair;
 			return true;
+		} else {
+			beenHashed.add(hashKey);
+			int rehash = rehash(k);
+			pairs[rehash] = nPair;
 		}
-		while (pairs[hashKey] != null) {
-			hashKey = hash(k, i);
-			i++;
-			collisions++;
-		}
-		pairs[hashKey] = nPair;
 		return false;
 	}
 
@@ -54,6 +54,20 @@ public class DoubleHashTable<K, V> {
 	}
 
 	public int maxRehashes() {
-		return 0;
+		return maxRehashes;
+	}
+
+	private int rehash (K k){
+		int i = 1;
+		int nHash = hash(k, i);
+		collisions++;
+		while (beenHashed.contains(nHash)) {
+			i++;
+			collisions++;
+			nHash = hash(k, i);
+		}
+		if(i > maxRehashes)
+			maxRehashes = i;
+		return nHash;
 	}
 }
