@@ -25,7 +25,8 @@ public class DoubleHashTable<K, V> {
 	}
 
 	public int hash(K key, int i) {
-		return (doubleHashable.hash(key) + i * doubleHashable.hashTick(key)) % primeSize;
+		int hashKey = (doubleHashable.hash(key) + i * doubleHashable.hashTick(key)) % primeSize;
+		return hashKey;
 	}
 
 	public boolean insert(K k, V v) {
@@ -35,9 +36,8 @@ public class DoubleHashTable<K, V> {
 			pairs[hashKey] = nPair;
 			return true;
 		} else {
-			beenHashed.add(hashKey);
-			int rehash = rehash(k);
-			pairs[rehash] = nPair;
+			pairs[hashKey] = nPair;
+			collisions++;
 		}
 		return false;
 	}
