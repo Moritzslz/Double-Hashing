@@ -20,5 +20,14 @@ public final class Main {
         System.out.println(dh.hashTick(12));
         System.out.println(dh.hashTick(1));
         System.out.println(dh.hashTick(-2));
+        System.out.println(dh.hashTick(0));
+        System.out.println(dh.hashTick(5));
+        System.out.println(dh.hashTick(14));
+        System.out.println(dh.hashTick(533));
+        System.out.println(dh.hashTick(312));
+        System.out.println(dh.hashTick(54));
+        System.out.println(dh.hashTick(958));
+        System.out.println(dh.hashTick(8));
+        System.out.println(dh.hashTick(49));
     }
 }
