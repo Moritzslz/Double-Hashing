@@ -17,10 +17,10 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
 			if (i % 2 == 0)
 				hashedString += ((bytes[i] + 3) * (i + 1)) % 16;
 			else
-				hashedString += (bytes[i] + 6) * (i - 1);
+				hashedString += (bytes[i] + 6) * (i - 1) % 7;
 		}
 		int hashedKey =  Integer.parseInt(hashedString);
-		return hashedKey;
+		return hashedKey % primeSize;
 	}
 
 	@Override
@@ -31,10 +31,10 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
 			if (i % 2 == 0)
 				hashedString += ((bytes[i] + 9) * (i + 3)) % 26;
 			else
-				hashedString += (bytes[i] + 5) * (i + 2);
+				hashedString += (bytes[i] + 5) * (i + 2) % 13;
 		}
 		int hashedKey =  Integer.parseInt(hashedString);
-		return hashedKey;
+		return hashedKey & primeSize;
 	}
 	private byte[] bytes(Integer key) {
 		return key.toString().getBytes(StandardCharsets.UTF_8);
