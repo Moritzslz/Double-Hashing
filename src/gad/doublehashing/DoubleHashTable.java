@@ -1,5 +1,6 @@
 package gad.doublehashing;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class DoubleHashTable<K, V> {
@@ -9,6 +10,7 @@ public class DoubleHashTable<K, V> {
 	HashableFactory hashableFactory;
 	DoubleHashable doubleHashable;
 	int collisions;
+	ArrayList hasBeenHashed;
 
 	@SuppressWarnings("unchecked")
 	public DoubleHashTable(int primeSize, HashableFactory<K> hashableFactory) {
@@ -24,15 +26,19 @@ public class DoubleHashTable<K, V> {
 	}
 
 	public boolean insert(K k, V v) {
+		int i = 1;
 		Pair nPair = new Pair(k, v);
 		int hashKey = hash(k,0);
 		if (pairs[hashKey] == null) {
 			pairs[hashKey] = nPair;
 			return true;
-		} else {
-			pairs[hashKey] = nPair;
+		}
+		while (pairs[hashKey] != null) {
+			hashKey = hash(k, i);
+			i++;
 			collisions++;
 		}
+		pairs[hashKey] = nPair;
 		return false;
 	}
 

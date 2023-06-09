@@ -24,6 +24,7 @@ public class DoubleHashString implements DoubleHashable<String> {
 	@Override
 	public int hashTick(String key) {
 		byte[] bytes = bytes(key);
+		bytes[0] = (byte) (bytes[0] & 0x7F);
 		int sum = 0;
 		for (int i = 0; i < key.length(); i++) {
 			sum += bytes[i] * vector[i % vector.length];
