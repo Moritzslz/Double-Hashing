@@ -5,36 +5,25 @@ import java.nio.charset.StandardCharsets;
 public class DoubleHashInt implements DoubleHashable<Integer> {
 
 	int primeSize;
+	int[] vector;
 	public DoubleHashInt(int primeSize) {
 		this.primeSize = primeSize;
+		this.vector = new int[]{1,2,3,4,5,6,7,8,9};
 	}
 
 	@Override
 	public int hash(Integer key) {
-		byte[] bytes = bytes(key);
-		String hashedString = "";
-		for (int i = 0; i < bytes.length; i++) {
-			if (i % 2 == 0)
-				hashedString += ((bytes[i] + 3) * (i + 1)) % 16;
-			else
-				hashedString += (bytes[i] + 6) * (i - 1) % 7;
-		}
-		int hashedKey =  Integer.parseInt(hashedString);
-		return hashedKey % primeSize;
+		return key % primeSize;
 	}
 
 	@Override
 	public int hashTick(Integer key) {
 		byte[] bytes = bytes(key);
-		String hashedString = "";
+		int sum = 0;
 		for (int i = 0; i < bytes.length; i++) {
-			if (i % 2 == 0)
-				hashedString += ((bytes[i] + 9) * (i + 3)) % 26;
-			else
-				hashedString += (bytes[i] + 5) * (i + 2) % 13;
+			sum += bytes[i] * vector[i % vector.length];
 		}
-		int hashedKey =  Integer.parseInt(hashedString);
-		return hashedKey & primeSize;
+		return sum % primeSize;
 	}
 	private byte[] bytes(Integer key) {
 		return key.toString().getBytes(StandardCharsets.UTF_8);
