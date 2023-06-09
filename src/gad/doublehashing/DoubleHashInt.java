@@ -21,7 +21,7 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
 	public int hashTick(Integer key) {
 		if(key < 0 )
 			key *= -1;
-		//return (1 + key) % (primeSize - 1);
-		return 1 + key / primeSize % primeSize - 1;
+		return 1 + key % (primeSize - 1);
+		//return 1 + key / primeSize % primeSize - 1;
 	}
 }
