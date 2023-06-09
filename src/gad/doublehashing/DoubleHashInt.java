@@ -12,12 +12,15 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
 
 	@Override
 	public int hash(Integer key) {
+		if(key < 0 )
+			key *= -1;
 		return key % primeSize;
 	}
 
 	@Override
 	public int hashTick(Integer key) {
-		//return 1 + (key/primeSize) % (primeSize - 1);
+		if(key < 0 )
+			key *= -1;
 		return (1 + key) % (primeSize - 1);
 	}
 }
