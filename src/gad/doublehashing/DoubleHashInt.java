@@ -14,33 +14,28 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
 
 	@Override
 	public int hash(Integer key) {
-		return key.hashCode();
-		/*
 		MessageDigest digest = null;
 		try {
 			digest = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
 		}
-		int i = key.hashCode();
-		byte[] hash = key.byteValue();
-		return bytesToInt(hash);
-		 */
+		byte[] hash = digest.digest(bytes(key));
+		int hashKey = bytesToInt(hash);
+		return hashKey;
 	}
 
 	@Override
 	public int hashTick(Integer key) {
-		return key.hashCode();
-		/*
 		MessageDigest digest = null;
 		try {
 			digest = MessageDigest.getInstance("SHA-256");
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException(e);
 		}
-		byte[] hash = key.byteValue();
-		return bytesToInt(hash);
-		 */
+		byte[] hash = digest.digest(bytes(key));
+		int hashKey = bytesToInt(hash);
+		return hashKey;
 	}
 
 	public int bytesToInt(byte[] hash) {
@@ -49,5 +44,9 @@ public class DoubleHashInt implements DoubleHashable<Integer> {
 			result |= (hash[i] & 0xFF) << (8 * (this.primeSize - i - 1));
 		}
 		return result;
+	}
+
+	private byte[] bytes(Integer key) {
+		return key.toString().getBytes(StandardCharsets.UTF_8);
 	}
 }
