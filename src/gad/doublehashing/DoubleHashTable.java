@@ -25,27 +25,21 @@ public class DoubleHashTable<K, V> {
 
 	public boolean insert(K k, V v) {
 		Pair nPair = new Pair(k, v);
-		for (int i=0; i < pairs.length; i++) {
-			if (pairs[i].one().equals(k)) {
-				if (!pairs[i].two().equals(null)) {
-					collisions++;
-					pairs[i] = nPair;
-					return false;
-				} else {
-					pairs[i] = nPair;
-					return true;
-				}
-			}
+		int hashKey = hash(k,0);
+		if (pairs[hashKey] == null) {
+			pairs[hashKey] = nPair;
+			return true;
+		} else {
+			pairs[hashKey] = nPair;
+			collisions++;
 		}
 		return false;
 	}
 
 	public Optional<V> find(K k) {
-		for (int i=0; i < pairs.length; i++) {
-			if (pairs[i].one().equals(k)) {
-				return Optional.of(pairs[i].two());
-			}
-		}
+		int hashKey = hash(k,0);
+		if (pairs[hashKey] != null)
+			return Optional.of(pairs[hashKey].two());
 		return Optional.empty();
 	}
 

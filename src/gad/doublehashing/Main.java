@@ -13,9 +13,6 @@ public final class Main {
 
         System.out.println(table.find(42));
 
-        DoubleHashInt dh = new DoubleHashInt(3);
-        System.out.println(dh.hash(42));
-        System.out.println(dh.hashTick(42));
 
     }
 }
