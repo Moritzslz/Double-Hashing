@@ -1,6 +1,5 @@
 package gad.doublehashing;
 
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class DoubleHashTable<K, V> {
@@ -11,7 +10,6 @@ public class DoubleHashTable<K, V> {
 	DoubleHashable doubleHashable;
 	int collisions;
 	int maxRehashes;
-	ArrayList beenHashed;
 
 	@SuppressWarnings("unchecked")
 	public DoubleHashTable(int primeSize, HashableFactory<K> hashableFactory) {
@@ -57,18 +55,8 @@ public class DoubleHashTable<K, V> {
 		return maxRehashes;
 	}
 
-	private int rehash (K k){
-		int i = 1;
-		int nHash = hash(k, i);
-		collisions++;
-		while (beenHashed.contains(nHash)) {
-			i++;
-			collisions++;
-			nHash = hash(k, i);
-		}
-		if(i > maxRehashes)
-			maxRehashes = i;
-		return nHash;
+	private int rehash (K k) {
+		return 0;
 	}
 
 }
