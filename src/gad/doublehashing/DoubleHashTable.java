@@ -22,53 +22,75 @@ public class DoubleHashTable<K, V> {
 	}
 
 	public int hash(K key, int i) {
-		int hashKey = (doubleHashable.hash(key) + i * doubleHashable.hashTick(key)) % primeSize;
-		return hashKey;
+		return  (doubleHashable.hash(key) + i * doubleHashable.hashTick(key)) % primeSize;
 	}
 
 	public boolean insert(K k, V v) {
-		Pair nPair = new Pair(k, v);
-		int hashKey = hash(k,0);
-
-		if (pairs[hashKey] == null) {
-			//Initialize Field
-			pairs[hashKey] = nPair;
+		int hash0 = hash(k, 0);
+		int hash1 = hash(k, 1);
+		int hash2 = hash(k, 2);
+		int hash3 = hash(k, 3);
+		if (pairs[hash0] == null) {
+			//Initialize
+			pairs[hash0] = new Pair<>(k, v);
 			return true;
-		} else if (pairs[hashKey].one() == k) {
+		} else if (pairs[hash0].one() == k) {
 			//Overwrite
-			pairs[hashKey] = nPair;
+			pairs[hash0] = new Pair<>(k, v);
 			return true;
-		} else if (isFull())
-			return false;
-		else if (pairs[hashKey].one() != k) {
-			//Collision
-			hashKey = hash(k, 1);
-			if (pairs[hashKey].one() == k)
-				pairs[hashKey] = nPair;
-			else if (pairs[hash(k, 2)].one() == k) {
-				collisions++;
-				pairs[hash(k, 2)] = nPair;
-			}
-			else if (pairs[hash(k, 3)].one() == k) {
-				collisions++;
-				pairs[hash(k, 3)] = nPair;
-			}
+		} else if (pairs[hash1].one() == k) {
+			//Skip
+			pairs[hash1] = new Pair<>(k, v);
+			collisions++;
+			if (maxRehashes < 1)
+				maxRehashes = 1;
+			return true;
+		} else if (pairs[hash2].one() == k) {
+			//Skip
+			pairs[hash2] = new Pair<>(k, v);
+			collisions++;
+			if (maxRehashes < 2)
+				maxRehashes = 2;
+			return true;
+		} else if (pairs[hash3].one() == k) {
+			//Skip
+			pairs[hash3] = new Pair<>(k, v);
+			collisions++;
+			if (maxRehashes < 3)
+				maxRehashes = 3;
 			return true;
 		}
 		return false;
 	}
 
 	public Optional<V> find(K k) {
-		int hashKey = hash(k,0);
-		if (pairs[hashKey].one() == k)
-			if (pairs[hashKey].two() != null)
-				return Optional.of(pairs[hashKey].two());
-		else if (pairs[hash(k, 1)].one() == k)
-			if (pairs[hash(k, 1)].two() != null)
-				return Optional.of(pairs[hash(k, 1)].two());
-		else if (pairs[hash(k, 2)].one() == k)
-			if (pairs[hash(k, 2)].two() != null)
-				return Optional.of(pairs[hash(k, 2)].two());
+		int hash0 = hash(k, 0);
+		int hash1 = hash(k, 1);
+		int hash2 = hash(k, 2);
+		int hash3 = hash(k, 3);
+		if (pairs[hash0] == null) {
+			return Optional.empty();
+		} else if (pairs[hash0].one() == k) {
+			if (pairs[hash0].two() != null)
+				return Optional.of(pairs[hash0].two());
+			else
+				return Optional.empty();
+		} else if (pairs[hash1].one() == k) {
+			if (pairs[hash1].two() != null)
+				return Optional.of(pairs[hash1].two());
+			else
+				return Optional.empty();
+		} else if (pairs[hash2].one() == k) {
+			if (pairs[hash2].two() != null)
+				return Optional.of(pairs[hash2].two());
+			else
+				return Optional.empty();
+		} else if (pairs[hash3].one() == k) {
+			if (pairs[hash3].two() != null)
+				return Optional.of(pairs[hash3].two());
+			else
+				return Optional.empty();
+		}
 		return Optional.empty();
 	}
 
@@ -78,24 +100,6 @@ public class DoubleHashTable<K, V> {
 
 	public int maxRehashes() {
 		return maxRehashes;
-	}
-
-	private int rehash (K k, int i) {
-		int rehash = hash(k, i);
-		if (pairs[rehash] == null || pairs[rehash].one() == k) {
-			if (i > maxRehashes)
-				maxRehashes = i;
-			return rehash;
-		} else
-			return rehash(k, i+1);
-	}
-
-	private boolean isFull() {
-		for (int i = 0; i < pairs.length; i++) {
-			if (pairs[i] == null)
-				return false;
-		}
-		return true;
 	}
 
 }
