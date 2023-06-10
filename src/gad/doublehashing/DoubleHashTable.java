@@ -32,10 +32,13 @@ public class DoubleHashTable<K, V> {
 		while (pairs[index] != null && !pairs[index].one().equals(k)) {
 			index = hash(k, ++rehashes);
 			collisions++;
+			if (rehashes > 10)
+				return false;
 		}
 
 		pairs[index] = new Pair<>(k, v);
-		maxRehashes = Math.max(maxRehashes, rehashes);
+		if (rehashes > maxRehashes)
+			maxRehashes = rehashes;
 		return true;
 	}
 
