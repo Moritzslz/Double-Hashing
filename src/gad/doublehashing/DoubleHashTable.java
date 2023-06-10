@@ -42,7 +42,7 @@ public class DoubleHashTable<K, V> {
 			return false;
 		else if (pairs[hashKey].one() != k) {
 			//Collision
-			hashKey = rehash(k, 1);
+			hashKey = hash(k, 1);
 			pairs[hashKey] = nPair;
 			return true;
 		}
