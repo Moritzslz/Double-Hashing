@@ -35,18 +35,15 @@ public class DoubleHashTable<K, V> {
 			//Initialize Field
 			pairs[hashKey] = nPair;
 			return true;
-		}
-		if (pairs[hashKey].one() == k) {
+		} else if (pairs[hashKey].one() == k) {
 			//Overwrite
 			pairs[hashKey] = nPair;
 			return true;
-		} else if(pairs[hashKey].one() != k) {
-			while (pairs[hashKey].one() != k && pairs[hashKey] != null) {
-				//Collision
-				i++;
-				collisions++;
-				hashKey = hash(k, i);
-			}
+		} else if (pairs[hashKey].one() != k) {
+			//Collision
+			i++;
+			collisions++;
+			hashKey = hash(k, i);
 			if (i > maxRehashes)
 				maxRehashes = i;
 			pairs[hashKey] = nPair;
