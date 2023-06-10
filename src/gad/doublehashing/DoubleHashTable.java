@@ -10,6 +10,7 @@ public class DoubleHashTable<K, V> {
 	DoubleHashable doubleHashable;
 	int collisions;
 	int maxRehashes;
+	int numberOfElements;
 
 	@SuppressWarnings("unchecked")
 	public DoubleHashTable(int primeSize, HashableFactory<K> hashableFactory) {
@@ -19,6 +20,7 @@ public class DoubleHashTable<K, V> {
 		this.doubleHashable = hashableFactory.create(primeSize);
 		collisions = 0;
 		maxRehashes = 0;
+		numberOfElements = 0;
 	}
 
 	public int hash(K key, int i) {
@@ -29,16 +31,21 @@ public class DoubleHashTable<K, V> {
 		int index = hash(k, 0);
 		int rehashes = 0;
 
+		if (numberOfElements == primeSize)
+			return false;
+
 		while (pairs[index] != null && !pairs[index].one().equals(k)) {
 			index = hash(k, ++rehashes);
 			collisions++;
-			if (rehashes == primeSize)
-				return false;
 		}
+		if (pairs[index] == null)
+			numberOfElements++;
 
 		pairs[index] = new Pair<>(k, v);
+
 		if (rehashes > maxRehashes)
 			maxRehashes = rehashes;
+
 		return true;
 	}
 
