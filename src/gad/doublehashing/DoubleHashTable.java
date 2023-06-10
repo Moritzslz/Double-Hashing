@@ -32,7 +32,7 @@ public class DoubleHashTable<K, V> {
 		while (pairs[index] != null && !pairs[index].one().equals(k)) {
 			index = hash(k, ++rehashes);
 			collisions++;
-			if (rehashes > 100)
+			if (rehashes == primeSize)
 				return false;
 		}
 
