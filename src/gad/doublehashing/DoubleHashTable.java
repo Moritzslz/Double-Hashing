@@ -38,7 +38,9 @@ public class DoubleHashTable<K, V> {
 			//Overwrite
 			pairs[hashKey] = nPair;
 			return true;
-		} else if (pairs[hashKey].one() != k) {
+		} else if (isFull())
+			return false;
+		else if (pairs[hashKey].one() != k) {
 			//Collision
 			hashKey = rehash(k, 1);
 			pairs[hashKey] = nPair;
@@ -69,7 +71,15 @@ public class DoubleHashTable<K, V> {
 				maxRehashes = i;
 			return rehash;
 		} else
-			return rehash(k, i++);
+			return rehash(k, i+1);
+	}
+
+	private boolean isFull() {
+		for (int i = 0; i < pairs.length; i++) {
+			if (pairs[i] == null)
+				return false;
+		}
+		return true;
 	}
 
 }
