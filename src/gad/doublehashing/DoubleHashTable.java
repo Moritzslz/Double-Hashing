@@ -31,7 +31,7 @@ public class DoubleHashTable<K, V> {
 		int index = hash(k, 0);
 		int rehashes = 0;
 
-		while (pairs[index] != null && !pairs[index].one().equals(k)) {
+		while (pairs[index] != null && !pairs[index].one().equals(k) && rehashes < primeSize) {
 			index = hash(k, ++rehashes);
 			collisions++;
 		}
