@@ -13,7 +13,6 @@ public class DoubleHashTable<K, V> {
 
 	@SuppressWarnings("unchecked")
 	public DoubleHashTable(int primeSize, HashableFactory<K> hashableFactory) {
-		// Erstellt ein Array von Pairs: (Pair<K, V>[]) new Pair[primeSize];
 		pairs = (Pair<K, V>[]) new Pair[primeSize];
 		this.primeSize = primeSize;
 		this.hashableFactory = hashableFactory;
@@ -28,21 +27,37 @@ public class DoubleHashTable<K, V> {
 	}
 
 	public boolean insert(K k, V v) {
+		int i = 0;
 		Pair nPair = new Pair(k, v);
-		int hashKey = hash(k,0);
+		int hashKey = hash(k,i);
+
 		if (pairs[hashKey] == null) {
+			//Initialize Field
 			pairs[hashKey] = nPair;
 			return true;
-		} else {
+		}
+		if (pairs[hashKey].one() == k) {
+			//Overwrite
 			pairs[hashKey] = nPair;
-			collisions++;
+			return true;
+		} else if(pairs[hashKey].one() != k) {
+			while (pairs[hashKey].one() != k && pairs[hashKey] != null) {
+				//Collision
+				i++;
+				collisions++;
+				hashKey = hash(k, i);
+			}
+			if (i > maxRehashes)
+				maxRehashes = i;
+			pairs[hashKey] = nPair;
+			return true;
 		}
 		return false;
 	}
 
 	public Optional<V> find(K k) {
 		int hashKey = hash(k,0);
-		if (pairs[hashKey] != null)
+		if (pairs[hashKey].two() != null)
 			return Optional.of(pairs[hashKey].two());
 		return Optional.empty();
 	}
