@@ -27,9 +27,8 @@ public class DoubleHashTable<K, V> {
 	}
 
 	public boolean insert(K k, V v) {
-		int i = 0;
 		Pair nPair = new Pair(k, v);
-		int hashKey = hash(k,i);
+		int hashKey = hash(k,0);
 
 		if (pairs[hashKey] == null) {
 			//Initialize Field
@@ -41,11 +40,7 @@ public class DoubleHashTable<K, V> {
 			return true;
 		} else if (pairs[hashKey].one() != k) {
 			//Collision
-			i++;
-			collisions++;
-			hashKey = hash(k, i);
-			if (i > maxRehashes)
-				maxRehashes = i;
+			hashKey = rehash(k, 1);
 			pairs[hashKey] = nPair;
 			return true;
 		}
@@ -67,8 +62,14 @@ public class DoubleHashTable<K, V> {
 		return maxRehashes;
 	}
 
-	private int rehash (K k) {
-		return 0;
+	private int rehash (K k, int i) {
+		int rehash = hash(k, i);
+		if (pairs[rehash] == null || pairs[rehash].one() == k) {
+			if (i > maxRehashes)
+				maxRehashes = i;
+			return rehash;
+		} else
+			return rehash(k, i++);
 	}
 
 }
