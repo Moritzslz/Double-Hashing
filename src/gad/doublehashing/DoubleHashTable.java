@@ -43,7 +43,16 @@ public class DoubleHashTable<K, V> {
 		else if (pairs[hashKey].one() != k) {
 			//Collision
 			hashKey = hash(k, 1);
-			pairs[hashKey] = nPair;
+			if (pairs[hashKey].one() == k)
+				pairs[hashKey] = nPair;
+			else if (pairs[hash(k, 2)].one() == k) {
+				collisions++;
+				pairs[hash(k, 2)] = nPair;
+			}
+			else if (pairs[hash(k, 3)].one() == k) {
+				collisions++;
+				pairs[hash(k, 3)] = nPair;
+			}
 			return true;
 		}
 		return false;
@@ -51,8 +60,15 @@ public class DoubleHashTable<K, V> {
 
 	public Optional<V> find(K k) {
 		int hashKey = hash(k,0);
-		if (pairs[hashKey].two() != null)
-			return Optional.of(pairs[hashKey].two());
+		if (pairs[hashKey].one() == k)
+			if (pairs[hashKey].two() != null)
+				return Optional.of(pairs[hashKey].two());
+		else if (pairs[hash(k, 1)].one() == k)
+			if (pairs[hash(k, 1)].two() != null)
+				return Optional.of(pairs[hash(k, 1)].two());
+		else if (pairs[hash(k, 2)].one() == k)
+			if (pairs[hash(k, 2)].two() != null)
+				return Optional.of(pairs[hash(k, 2)].two());
 		return Optional.empty();
 	}
 
