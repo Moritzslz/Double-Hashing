@@ -70,4 +70,5 @@ public class DoubleHashTable<K, V> {
 			maxRehashes = i;
 		return nHash;
 	}
+
 }
