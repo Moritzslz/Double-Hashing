@@ -32,13 +32,6 @@ public class DoubleHashTable<K, V> {
 		int rehashes = 0;
 		boolean collision = false;
 
-		/*
-		while (pairs[index] != null && !pairs[index].one().equals(k)) {
-			index = hash(k, ++rehashes);
-			collisions++;
-		}
-		 */
-
 		for (int i = 0; i < primeSize; i++) {
 			if (pairs[index] != null && !pairs[index].one().equals(k)) {
 				index = hash(k, ++rehashes);
@@ -60,14 +53,14 @@ public class DoubleHashTable<K, V> {
 		int index = hash(k, 0);
 		int rehashes = 0;
 
-		/*
 		while (pairs[index] != null) {
 			if (pairs[index].one().equals(k)) {
 				return Optional.of(pairs[index].two());
+			} else {
+				index = hash(k, ++rehashes);
 			}
 		}
-		 */
-
+		/*
 		for(int i = 0; i < primeSize; i++) {
 			if (pairs[index] == null)
 				return Optional.empty();
@@ -77,6 +70,8 @@ public class DoubleHashTable<K, V> {
 				return Optional.of(pairs[index].two());
 			}
 		}
+
+		 */
 
 		return Optional.empty();
 	}
