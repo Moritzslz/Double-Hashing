@@ -4,13 +4,12 @@ import java.util.Optional;
 
 public class DoubleHashTable<K, V> {
 
-	Pair<K, V>[] pairs;
-	int primeSize;
-	HashableFactory hashableFactory;
-	DoubleHashable doubleHashable;
-	int collisions;
-	int maxRehashes;
-	int numberOfElements;
+	private Pair<K, V>[] pairs;
+	private int primeSize;
+	private HashableFactory hashableFactory;
+	private DoubleHashable doubleHashable;
+	private int collisions;
+	private int maxRehashes;
 
 	@SuppressWarnings("unchecked")
 	public DoubleHashTable(int primeSize, HashableFactory<K> hashableFactory) {
@@ -20,7 +19,6 @@ public class DoubleHashTable<K, V> {
 		this.doubleHashable = hashableFactory.create(primeSize);
 		collisions = 0;
 		maxRehashes = 0;
-		numberOfElements = 0;
 	}
 
 	public int hash(K key, int i) {
@@ -41,8 +39,9 @@ public class DoubleHashTable<K, V> {
 				}
 			} else {
 				pairs[index] = new Pair<>(k, v);
-				if (rehashes > maxRehashes)
+				if (rehashes > maxRehashes) {
 					maxRehashes = rehashes;
+				}
 				return true;
 			}
 		}
@@ -53,25 +52,15 @@ public class DoubleHashTable<K, V> {
 		int index = hash(k, 0);
 		int rehashes = 0;
 
-		while (pairs[index] != null) {
-			if (pairs[index].one().equals(k)) {
-				return Optional.of(pairs[index].two());
-			} else {
-				index = hash(k, ++rehashes);
-			}
-		}
-		/*
 		for(int i = 0; i < primeSize; i++) {
 			if (pairs[index] == null)
 				return Optional.empty();
-			else if (!pairs[index].one().equals(k)) {
-				index = hash(k, ++rehashes);
-			} else {
+			else if (pairs[index].one().equals(k)) {
 				return Optional.of(pairs[index].two());
+			} else {
+				index = hash(k, ++rehashes);
 			}
 		}
-
-		 */
 
 		return Optional.empty();
 	}
