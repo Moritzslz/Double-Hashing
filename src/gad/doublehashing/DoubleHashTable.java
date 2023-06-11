@@ -30,6 +30,7 @@ public class DoubleHashTable<K, V> {
 	public boolean insert(K k, V v) {
 		int index = hash(k, 0);
 		int rehashes = 0;
+		boolean collision = false;
 
 		/*
 		while (pairs[index] != null && !pairs[index].one().equals(k)) {
@@ -41,7 +42,10 @@ public class DoubleHashTable<K, V> {
 		for (int i = 0; i < primeSize; i++) {
 			if (pairs[index] != null && !pairs[index].one().equals(k)) {
 				index = hash(k, ++rehashes);
-				collisions++;
+				if (!collision) {
+					collisions++;
+					collision = true;
+				}
 			} else {
 				pairs[index] = new Pair<>(k, v);
 				if (rehashes > maxRehashes)
