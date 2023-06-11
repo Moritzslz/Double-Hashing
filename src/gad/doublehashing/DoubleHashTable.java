@@ -31,9 +31,20 @@ public class DoubleHashTable<K, V> {
 		int index = hash(k, 0);
 		int rehashes = 0;
 
-		while (pairs[index] != null && !pairs[index].one().equals(k) && rehashes < primeSize) {
+		/*
+		while (pairs[index] != null && !pairs[index].one().equals(k)) {
 			index = hash(k, ++rehashes);
 			collisions++;
+		}
+		 */
+
+		for (int i = 0; i < primeSize; i++) {
+			if (pairs[index] != null && !pairs[index].one().equals(k)) {
+				index = hash(k, ++rehashes);
+				collisions++;
+			} else {
+				break;
+			}
 		}
 
 		pairs[index] = new Pair<>(k, v);
