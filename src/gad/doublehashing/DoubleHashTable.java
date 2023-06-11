@@ -6,7 +6,6 @@ public class DoubleHashTable<K, V> {
 
 	private Pair<K, V>[] pairs;
 	private int primeSize;
-	private HashableFactory hashableFactory;
 	private DoubleHashable doubleHashable;
 	private int collisions;
 	private int maxRehashes;
@@ -15,7 +14,6 @@ public class DoubleHashTable<K, V> {
 	public DoubleHashTable(int primeSize, HashableFactory<K> hashableFactory) {
 		pairs = (Pair<K, V>[]) new Pair[primeSize];
 		this.primeSize = primeSize;
-		this.hashableFactory = hashableFactory;
 		this.doubleHashable = hashableFactory.create(primeSize);
 		collisions = 0;
 		maxRehashes = 0;
@@ -53,9 +51,9 @@ public class DoubleHashTable<K, V> {
 		int rehashes = 0;
 
 		for(int i = 0; i < primeSize; i++) {
-			if (pairs[index] == null)
+			if (pairs[index] == null) {
 				return Optional.empty();
-			else if (pairs[index].one().equals(k)) {
+			} else if (pairs[index].one().equals(k)) {
 				return Optional.of(pairs[index].two());
 			} else {
 				index = hash(k, ++rehashes);
