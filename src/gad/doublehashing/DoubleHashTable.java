@@ -43,16 +43,13 @@ public class DoubleHashTable<K, V> {
 				index = hash(k, ++rehashes);
 				collisions++;
 			} else {
-				break;
+				pairs[index] = new Pair<>(k, v);
+				if (rehashes > maxRehashes)
+					maxRehashes = rehashes;
+				return true;
 			}
 		}
-
-		pairs[index] = new Pair<>(k, v);
-
-		if (rehashes > maxRehashes)
-			maxRehashes = rehashes;
-
-		return true;
+		return false;
 	}
 
 	public Optional<V> find(K k) {
