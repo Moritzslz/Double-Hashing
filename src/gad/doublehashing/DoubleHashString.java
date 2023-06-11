@@ -13,24 +13,17 @@ public class DoubleHashString implements DoubleHashable<String> {
 
 	@Override
 	public int hash(String key) {
-		byte[] bytes = bytes(key);
-		int sum = 0;
-		for (int i = 0; i < key.length(); i++) {
-			sum += bytes[i] * vector[i % vector.length];
-		}
-		return sum % primeSize;
+		int hash = 0;
+		for (char c : key.toCharArray())
+			hash += c;
+		return hash % primeSize;
 	}
 
 	@Override
 	public int hashTick(String key) {
-		byte[] bytes = bytes(key);
-		bytes[0] = (byte) (bytes[0] & 0x7F);
-		int sum = 0;
-		for (int i = 0; i < key.length(); i++) {
-			sum += bytes[i] * vector[i % vector.length];
-		}
-		return  1 + sum % (primeSize - 1);
+		int hash = 0;
+		for (char c : key.toCharArray())
+			hash += c;
+		return  1 + hash % (primeSize - 1);
 	}
-
-	private byte[] bytes(String key) {return key.getBytes(StandardCharsets.UTF_8);}
 }

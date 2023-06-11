@@ -60,12 +60,22 @@ public class DoubleHashTable<K, V> {
 		int index = hash(k, 0);
 		int rehashes = 0;
 
+		/*
 		while (pairs[index] != null) {
 			if (pairs[index].one().equals(k)) {
 				return Optional.of(pairs[index].two());
 			}
+		}
+		 */
 
-			index = hash(k, ++rehashes);
+		for(int i = 0; i < primeSize; i++) {
+			if (pairs[index] == null)
+				return Optional.empty();
+			else if (!pairs[index].one().equals(k)) {
+				index = hash(k, ++rehashes);
+			} else {
+				return Optional.of(pairs[index].two());
+			}
 		}
 
 		return Optional.empty();
